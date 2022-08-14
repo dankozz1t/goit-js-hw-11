@@ -6,11 +6,30 @@
     <title>Homework 11</title>
   </head>
   <body>
-    <head></head>
-    <main>
-      <div><span>I am main</span></div>
+    <main class="search">
+      <form class="search-form" id="search-form">
+        <input
+          class="search-form__input"
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button class="search-form__btn" type="submit">Search</button>
+      </form>
+
+      <div class="gallery"></div>
+
+      <button class="load-btn" type="button" data-action="load-more">
+        <span
+          class="spinner-border spinner-border-sm spinner is-hidden"
+          role="status"
+          aria-hidden="true"
+        ></span>
+
+        <span class="label">Load more</span>
+      </button>
     </main>
-    <footer></footer>
     <script type="module" src="./index.js"></script>
   </body>
 </html>
