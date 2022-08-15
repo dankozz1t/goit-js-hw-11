@@ -17,8 +17,6 @@ export default class NewsApiService {
 
   async fetchImages() {
     try {
-      this.incrementPage();
-
       const searchOptions = {
         params: {
           ...BASE_SEARCH_OPTIONS,
@@ -27,6 +25,7 @@ export default class NewsApiService {
           per_page: this.per_page,
         },
       };
+      this.incrementPage();
 
       const url = `${BASE_URL}?key=${API_KEY}`;
 
