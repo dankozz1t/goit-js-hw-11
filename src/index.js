@@ -35,7 +35,7 @@ function onSearch(e) {
 
 function fetchImages() {
   loadMoreBtn.disable();
-  newsApiService.fetchImages().then(images => {
+  newsApiService.fetchImages().then(({ data: { hits: images } }) => {
     if (images.length === 0) {
       Notify.failure(
         '❌Sorry, there are no images matching your search query. Please try again.'
