@@ -4,21 +4,36 @@ import templateImages from './templates/photo-card.hbs';
 import NewsApiService from './js/api-service.js';
 import LoadMoreBtn from './js/components/load-more-btn';
 
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 const refs = {
-  searchForm: document.querySelector('.search-form'),
-  imagesContainer: document.querySelector('.gallery'),
+  searchFormEl: document.querySelector('.search-form'),
+  imagesContainerEl: document.querySelector('.gallery'),
+  inputEl: document.querySelector('.search-form__input'),
+  buttonEl: document.querySelector('.search-form__btn'),
 };
+
+const newsApiService = new NewsApiService();
+
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: true,
 });
-const newsApiService = new NewsApiService();
 
-refs.searchForm.addEventListener('submit', onSearch);
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  scrollZoomFactor: false,
+});
+
+refs.searchFormEl.addEventListener('submit', onSearch);
+refs.inputEl.addEventListener('input', () => (refs.buttonEl.disabled = false));
 loadMoreBtn.refs.button.addEventListener('click', fetchImages);
 
 function onSearch(e) {
   e.preventDefault();
+  refs.buttonEl.disabled = true;
 
   newsApiService.searchQuery = e.currentTarget.elements.searchQuery.value;
 
@@ -35,23 +50,41 @@ function onSearch(e) {
 
 function fetchImages() {
   loadMoreBtn.disable();
-  newsApiService.fetchImages().then(({ data: { hits: images } }) => {
-    if (images.length === 0) {
+
+  newsApiService.fetchImages().then(({ data }) => {
+    newsApiService.totalPage = Math.ceil(data.total / newsApiService.per_page);
+    newsApiService.loadedNow += data.hits.length;
+
+    if (newsApiService.page === 2) {
+      Notify.success(`✅Hooray! We found ${data.total} images.`);
+    }
+
+    if (newsApiService.totalPage + 1 === newsApiService.page) {
+      loadMoreBtn.hide();
+    }
+
+    if (data.hits.length === 0) {
       Notify.failure(
         '❌Sorry, there are no images matching your search query. Please try again.'
       );
       return;
     }
-    Notify.success(`✅Hooray! We found ${images.totalHits} images.`);
-    appendImagesMarkup(images);
+
+    Notify.success(`✅Loaded ${newsApiService.loadedNow} images.`);
+    appendImagesMarkup(data.hits);
+    lightbox.refresh();
+
     loadMoreBtn.enable();
   });
 }
 
 function appendImagesMarkup(images) {
-  refs.imagesContainer.insertAdjacentHTML('beforeend', templateImages(images));
+  refs.imagesContainerEl.insertAdjacentHTML(
+    'beforeend',
+    templateImages(images)
+  );
 }
 
 function clearImagesContainer() {
-  refs.imagesContainer.innerHTML = '';
+  refs.imagesContainerEl.innerHTML = '';
 }
