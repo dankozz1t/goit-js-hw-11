@@ -12,7 +12,7 @@ export default class NewsApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
-    this.per_page = 20;
+    this.per_page = 40;
     this.totalPage = 0;
     this.loadedNow = 0;
   }
