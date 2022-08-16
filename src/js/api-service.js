@@ -28,6 +28,7 @@ export default class NewsApiService {
         },
       };
       this.incrementPage();
+      this.resetLoaded();
 
       const url = `${BASE_URL}?key=${API_KEY}`;
 
@@ -43,6 +44,10 @@ export default class NewsApiService {
 
   resetPage() {
     this.page = 1;
+  }
+
+  resetLoaded() {
+    this.loadedNow = 0;
   }
 
   get query() {
