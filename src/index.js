@@ -21,7 +21,7 @@ const loadMoreBtn = new LoadMoreBtn({
   hidden: true,
 });
 
-const lightbox = new SimpleLightbox('.gallery a', {
+const simpleLightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
   scrollZoomFactor: false,
@@ -72,7 +72,7 @@ function fetchImages() {
 
     Notify.success(`✅Loaded ${newsApiService.loadedNow} images.`);
     appendImagesMarkup(data.hits);
-    lightbox.refresh();
+    simpleLightbox.refresh();
 
     loadMoreBtn.enable();
   });
