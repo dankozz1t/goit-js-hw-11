@@ -13,6 +13,8 @@ export default class NewsApiService {
     this.searchQuery = '';
     this.page = 1;
     this.per_page = 20;
+    this.totalPage = 0;
+    this.loadedNow = 0;
   }
 
   async fetchImages() {
