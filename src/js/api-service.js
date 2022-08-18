@@ -21,7 +21,7 @@ export default class NewsApiService {
     try {
       const searchOptions = {
         params: {
-          ...NewsApiService.#BASE_SEARCH_OPTIONS,
+          ...[NewsApiService.#BASE_SEARCH_OPTIONS],
           q: this.searchQuery,
           page: this.page,
           per_page: this.per_page,
